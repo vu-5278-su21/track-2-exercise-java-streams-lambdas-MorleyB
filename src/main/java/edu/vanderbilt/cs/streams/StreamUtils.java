@@ -1,10 +1,15 @@
 package edu.vanderbilt.cs.streams;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import edu.vanderbilt.cs.streams.BikeRide.DataFrame;
 
 public class StreamUtils {
 
@@ -37,8 +42,11 @@ public class StreamUtils {
         // 2. Think of how you could use IntStream.range()
         // 3. List.subLIst will be useful to you
         // 4. A windowSize < 1 should return an empty stream
-
-        return Stream.empty();
+    	
+    	Stream<List<T>> lst = IntStream.range(0, data.size())
+    			.filter(i -> windowSize > 0 && windowSize + i <= data.size() && i <= windowSize + i)
+    			.mapToObj(i -> data.subList(i, windowSize + i));
+        return lst;
     }
 
     /**
@@ -69,7 +77,8 @@ public class StreamUtils {
             // You need to update this code here to
             // return the average of the property that
             // is extracted with the function `f`
-            return 0.0;
+        	// return window.stream().map(f).average();
+        	return window.stream().collect(Collectors.averagingDouble(f));
         };
     }
 
