@@ -1,10 +1,13 @@
 package edu.vanderbilt.cs.streams;
 
+import java.awt.Frame;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -125,7 +128,7 @@ public class BikeRide {
     // Hint: see Arrays.stream(...)
     //
     public DoubleStream heartRateStream() {
-        return DoubleStream.empty();
+        return DoubleStream.of(heartRate);
     }
 
     // @ToDo:
@@ -134,7 +137,7 @@ public class BikeRide {
     // stream of the specified values
     //
     public DoubleStream velocityStream() {
-        return DoubleStream.empty();
+        return DoubleStream.of(velocity);
     }
 
     // @ToDo:
@@ -142,7 +145,7 @@ public class BikeRide {
     // Implement this method so it returns a
     // stream of the specified values
     public DoubleStream gradeStream() {
-        return DoubleStream.empty();
+        return DoubleStream.of(grade);
     }
 
     // @ToDo:
@@ -150,7 +153,7 @@ public class BikeRide {
     // Implement this method so it returns a
     // stream of the specified values
     public DoubleStream altitudeStream() {
-        return DoubleStream.empty();
+        return DoubleStream.of(altitude);
     }
 
     // @ToDo:
@@ -158,7 +161,7 @@ public class BikeRide {
     // Implement this method so it returns a
     // stream of the specified values
     public Stream<LatLng> coordinateStream() {
-        return Stream.empty();
+        return Stream.of(coordinates);
     }
 
 
@@ -170,8 +173,15 @@ public class BikeRide {
     // occurs at each index in each of the corresponding
     // data arrays (e.g., heartRate, velocity, etc.)
     //
-    public Stream<DataFrame> fusedFramesStream() {
-        return Stream.empty();
+    public Stream<DataFrame> fusedFramesStream() {    	
+    	Stream<DataFrame> lst = IntStream.range(0, (int) gradeStream().count())
+    	         .mapToObj(i -> new DataFrame(
+    	        		 	 (LatLng) coordinateStream().toArray()[i],
+	    	        		 gradeStream().toArray()[i],
+	    	        		 altitudeStream().toArray()[i],
+	    	        		 velocityStream().toArray()[i],
+	    	        		 heartRateStream().toArray()[i]));
+        return lst;
     }
 
 
